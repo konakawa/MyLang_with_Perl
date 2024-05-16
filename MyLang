@@ -1,0 +1,20 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+use lib 'lib';
+use MyParser;
+use MyLexer qw(next_token yyerror);
+use MyEvaluator qw(exec);
+
+my $filename = $ARGV[0];
+if (!defined $filename) {
+    die "Usage: $0 <filename>\n";
+}
+
+open my $fh, '<', $filename or die "Can't open $filename: $!";
+my $file_contents = do { local $/; <$fh> };
+close $fh;
+
+my $result = exec($file_contents);
+print "=> $result\n"

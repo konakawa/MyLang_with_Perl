@@ -1,0 +1,31 @@
+%{
+use strict;
+use warnings;
+
+use ExprHelpers qw(Evalue Eadd Esub Emul Ediv);
+%}
+
+%token INT 
+%token PLUS MINUS TIMES DIVIDE
+
+%start expr
+
+%%
+
+expr:
+      expr PLUS term { Eadd($_[1], $_[3]) }
+    | expr MINUS term { Esub($_[1], $_[3]) }
+    | term { $_[1] }
+;
+
+term:
+      term TIMES factor { Emul($_[1], $_[3]) }
+    | term DIVIDE factor { Ediv($_[1], $_[3]) }
+    | factor { $_[1] }
+;
+
+factor:
+      INT { Evalue($_[1]) }
+;
+
+%%
